@@ -44,7 +44,7 @@ export default async function LandingPage() {
             </Link>
           )}
           <a 
-            href="https://github.com/yourusername/your-repo" 
+            href="https://github.com/Manthanpelne/SmartBook" 
             target="_blank"
             className="px-8 py-4 bg-white border border-gray-200 text-black rounded-full font-medium hover:bg-gray-50 transition-colors shadow-sm"
           >
