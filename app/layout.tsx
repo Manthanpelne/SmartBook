@@ -5,6 +5,11 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/utils/supabase/server";
 import { Toaster } from "sonner";
+import { Suspense } from "react";
+
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -24,17 +29,21 @@ const geistSans = Geist({
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode;
-}>) {
-
+  params: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await params; // If you need to use them
   const supabase = await createClient()
   const {data: { user}} = await supabase.auth.getUser()
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased bg-[#F5F5F7]`}>
-        <Navbar user={user} />
+       <Suspense fallback={<div className="h-16" />}>
+          <Navbar user={user} />
+        </Suspense>
         <Toaster position="top-right" richColors />
         <ThemeProvider
           attribute="class"
