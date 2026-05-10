@@ -28,12 +28,8 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
 
   // 2. Realtime Sync Logic
   useEffect(() => {
-   const channel = supabase
-  .channel('bookmarks-realtime', {
-    config: {
-      broadcast: { self: true }, // This is the key for the 1st tab!
-    },
-  })
+    const channel = supabase
+      .channel('schema-db-changes')
       .on(
         'postgres_changes',
         {
