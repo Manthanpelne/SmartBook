@@ -29,7 +29,11 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
   // 2. Realtime Sync Logic
   useEffect(() => {
     const channel = supabase
-      .channel('schema-db-changes')
+      .channel('bookmarks-realtime', {
+    config: {
+      broadcast: { self: true }, // Ensures events are seen across all tabs
+    },
+  })
       .on(
         'postgres_changes',
         {
@@ -45,7 +49,9 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+    console.log('Subscription status:', status); // Checking this in Vercel Console (F12)
+  });
 
     return () => {
       supabase.removeChannel(channel);
