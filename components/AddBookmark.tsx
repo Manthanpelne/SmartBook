@@ -15,9 +15,13 @@ export default function AddBookmark() {
     e.preventDefault();
     setLoading(true);
 
+    const { data: { user } } = await supabase.auth.getUser(); 
+
     const { error } = await supabase
       .from('bookmarks')
-      .insert([{ url, title }]);
+      .insert([{ url, title,
+        user_id : user?.id
+       }]);
 
     if (error) {
       alert(error.message);
